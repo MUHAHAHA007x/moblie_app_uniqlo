@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moblie_app_uniqlo/Show-Pic/List-Pic.dart';
+import 'package:moblie_app_uniqlo/Show-Pic/product_detail.dart';
+import 'package:moblie_app_uniqlo/Show-Pic/product_image.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              return buildeUniqlo(Listpic.sample[index]);
+              return buildeUniqlo(context, Listpic.sample[index]);
             },
             itemCount: Listpic.sample.length,
           ),
@@ -50,14 +52,44 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildeUniqlo(Listpic uni) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Image(image: AssetImage(uni.imageUrl)),
-          Text(uni.imgLable),
-        ],
-      ),
-    );
+  Widget buildeUniqlo(BuildContext context, Listpic uni) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return ProductDetail(product: uni);
+              },
+            ),
+          );
+        },
+        child: Card(
+          elevation: 4.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          margin: const EdgeInsets.all(
+              10), // เพิ่มระยะห่างระหว่างการ์ดให้นิดนึงจะสวยขึ้น
+          child: Column(
+            children: <Widget>[
+              // เรียกใช้ Widget จากไฟล์ที่เราแยกไว้
+              ProductImage(
+                imagePath: uni.imageUrl,
+                height: 250, // อยากปรับความสูงรูปแก้ตรงนี้ได้เลย
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  uni.imgLable,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
